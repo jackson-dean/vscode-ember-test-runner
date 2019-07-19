@@ -2,9 +2,14 @@
 	"name": "vscode-ember-test-runner",
 	"displayName": "VSCode Ember Test Runner",
 	"description": "Run ember tests from within vscode",
+	"publisher": "jxson",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.36.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jackson-dean/vscode-ember-test-runner.git"
 	},
 	"categories": [
 		"Other"
