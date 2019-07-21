@@ -6,7 +6,7 @@ export const docSelector = {
   scheme: "file"
 };
 
-const QUNIT_SYNTAX_REGEX = /module\('(.+)'|test\('(.+)'/g;
+const QUNIT_SYNTAX_REGEX = /module\(['"](.+)['"]|test\(['"](.+)['"]/g;
 
 function walkMatches(text: string, callback: Function) {
     let match;
@@ -32,11 +32,9 @@ export class RunTestCodeLensProvider implements CodeLensProvider {
       const endPos = document.positionAt(match.index + match[0].length);
       const [_, moduleInvocation, testInvocation] = match;
 
-      if (!topLevelModuleName) {
+      if (!topLevelModuleName && moduleInvocation) {
         topLevelModuleName = moduleInvocation;
-      }
-
-      if (topLevelModuleName && moduleInvocation) {
+      } else if (topLevelModuleName && moduleInvocation) {
         nestedModuleName = `${topLevelModuleName} > ${moduleInvocation}`;
       }
 
@@ -46,7 +44,7 @@ export class RunTestCodeLensProvider implements CodeLensProvider {
       lenses.push(
         new CodeLens(new Range(startPos, endPos), {
           command: runTestCommandName,
-          title: moduleInvocation ? "Run test module" : "Run test",
+          title: moduleInvocation ? "Run Module" : "Run Test",
           arguments: [testString],
         })
       );
