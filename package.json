@@ -3,7 +3,7 @@
 	"displayName": "VSCode Ember Test Runner",
 	"description": "Run ember tests from within vscode",
 	"publisher": "jxson",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"engines": {
 		"vscode": "^1.36.0"
 	},
@@ -20,10 +20,12 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [{
-			"command": "extension.runTest",
-			"title": "Ember: Run Test"
-		}],
+		"commands": [
+			{
+				"command": "extension.runTest",
+				"title": "Ember: Run Test"
+			}
+		],
 		"configuration": {
 			"title": "Test page url",
 			"properties": {
