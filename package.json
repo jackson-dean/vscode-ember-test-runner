@@ -20,6 +20,10 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"commands": [{
+			"command": "extension.runTest",
+			"title": "Ember: Run Test"
+		}],
 		"configuration": {
 			"title": "Test page url",
 			"properties": {
