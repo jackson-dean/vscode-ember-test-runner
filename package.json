@@ -3,7 +3,7 @@
 	"displayName": "VSCode Ember Test Runner",
 	"description": "Run ember tests from within vscode",
 	"publisher": "jxson",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"engines": {
 		"vscode": "^1.36.0"
 	},
