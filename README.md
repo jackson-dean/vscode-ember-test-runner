@@ -2,14 +2,17 @@
 Run ember qunit tests filtered by module or specific test from within vscode.
 
 ## Features
-After installing, there should be a code lens action with the text "Run Test"
-displayed over test module or individual test invocations. 
+Provides a code lens action with the text "Run Module" displayed over module
+invocations and "Run Test" displayed over test invocations.
+
+![Screenshot](./resources/test-runner-screen-shot.png)
 
 Clicking the code lens text should open the test runner in the default
-browser pre-filtered to the desired test string.
+browser, pre-filtered to the desired test string.
 
-- Works with nested modules
-- Scopes test filter to the module or parent nested it is contained within
+- Works with nested modules and scopes nested modules to the top level module.
+- Scopes the test filter to the module (or modules) it is
+contained within.
 
 ## Requirements
 Make sure the tests are being served by running `ember test --serve` in the
