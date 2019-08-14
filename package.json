@@ -31,7 +31,7 @@
 			"properties": {
 				"vscode-ember-test-runner.testPageUrl": {
 					"type": "string",
-					"default": "https://localhost:4444/tests/index.html?hidepassed",
+					"default": "http://localhost:7375/tests/index.html?hidepassed",
 					"description": "The base url used to access the test page"
 				}
 			}

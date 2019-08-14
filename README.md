@@ -22,7 +22,7 @@ root of the project.
 This extension contributes the following settings:
 
 * `vscode-ember-test-runner.testPageUrl`: set this to the url that should be used
-when running tests. By default it is set to: "https://localhost:4444?hidepassed"
+when running tests. By default it is set to: "http://localhost:7375?hidepassed"
 
 ## Known Limitations
 - Currently only supports qunit test syntax
