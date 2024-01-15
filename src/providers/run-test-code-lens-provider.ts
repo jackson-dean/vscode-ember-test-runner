@@ -1,10 +1,13 @@
 import { CodeLensProvider, CodeLens, TextDocument, Range } from "vscode";
 import { name as runTestCommandName } from '../commands/run-test';
 
-export const docSelector = {
-  language: "javascript",
-  scheme: "file"
-};
+// Define the languages and schemes for which the CodeLensProvider should be registered
+export const languagesAndSchemes = [
+  { language: "javascript", scheme: "file"},
+  { language: "typescript", scheme: "file" },
+  { language: "glimmer-js", scheme: "file" },
+  { language: "glimmer-ts", scheme: "file" },
+];
 
 const QUNIT_SYNTAX_REGEX = /module\(['"](.+)['"]|test\(['"](.+)['"]/g;
 
@@ -18,7 +21,7 @@ function walkMatches(text: string, callback: Function) {
 
 export class RunTestCodeLensProvider implements CodeLensProvider {
   async provideCodeLenses(document: TextDocument): Promise<CodeLens[]> {
-    if (document.fileName.match(/-test.(js|ts)$/) === null) {
+    if (document.fileName.match(/-test.(js|ts|gjs|gts)$/) === null) {
       // bail if it is not a test file.
       return [];
     }

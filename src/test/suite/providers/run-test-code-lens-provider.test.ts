@@ -6,18 +6,220 @@ import { RunTestCodeLensProvider } from '../../../providers/run-test-code-lens-p
 suite('RunTestCodeLensProvider', () => {
   test('it returns empty codelenses array when none are found', async () => {
     const textDocument = await workspace.openTextDocument({
-      language: 'js',
+      language: 'javascript',
       content: '',
     });
 
     const provider = new RunTestCodeLensProvider();
     const lenses = await provider.provideCodeLenses(textDocument);
-    assert.equal(lenses.length, 0);
+    assert.strictEqual(lenses.length, 0);
+  });
+
+  test('it returns the expected codelenses for a test tile with a ts extension', async () => {
+    const textDocument = await workspace.openTextDocument({
+      language: 'typescript',
+      content: `import { module, test } from 'qunit';
+
+module('Unit | Utility | test-util', function() {
+  test('it does the thing', function(assert) {
+    assert.ok(true);
+  });
+});`,
+    });
+
+    const doc: TextDocument = {
+      ...textDocument,
+      fileName: 'dummy-test.ts',
+    };
+
+    const provider = new RunTestCodeLensProvider();
+    const lenses = await provider.provideCodeLenses(doc);
+    const parsedLenses = JSON.parse(JSON.stringify(lenses));
+    console.log(JSON.stringify(lenses))
+
+    assert.deepStrictEqual(
+      parsedLenses,
+      [
+        {
+          "range": [
+            {
+              "line": 2,
+              "character": 0
+            },
+            {
+              "line": 2,
+              "character": 35
+            }
+          ],
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Module",
+            "arguments": [
+              "Unit | Utility | test-util"
+            ]
+          }
+        },
+        {
+          "range": [
+            {
+              "line": 3,
+              "character": 2
+            },
+            {
+              "line": 3,
+              "character": 26
+            }
+          ],
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Test",
+            "arguments": [
+              "Unit | Utility | test-util: it does the thing"
+            ]
+          }
+        }
+      ],
+    );
+  });
+
+
+  test('it returns the expected codelenses for a test tile with a gts extension', async () => {
+    const textDocument = await workspace.openTextDocument({
+      language: 'glint-ts',
+      content: `import { module, test } from 'qunit';
+
+module('Unit | Utility | test-util', function() {
+  test('it does the thing', function(assert) {
+    assert.ok(true);
+  });
+});`,
+    });
+
+    const doc: TextDocument = {
+      ...textDocument,
+      fileName: 'dummy-test.gts',
+    };
+
+    const provider = new RunTestCodeLensProvider();
+    const lenses = await provider.provideCodeLenses(doc);
+    const parsedLenses = JSON.parse(JSON.stringify(lenses));
+    console.log(JSON.stringify(lenses))
+
+    assert.deepStrictEqual(
+      parsedLenses,
+      [
+        {
+          "range": [
+            {
+              "line": 2,
+              "character": 0
+            },
+            {
+              "line": 2,
+              "character": 35
+            }
+          ],
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Module",
+            "arguments": [
+              "Unit | Utility | test-util"
+            ]
+          }
+        },
+        {
+          "range": [
+            {
+              "line": 3,
+              "character": 2
+            },
+            {
+              "line": 3,
+              "character": 26
+            }
+          ],
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Test",
+            "arguments": [
+              "Unit | Utility | test-util: it does the thing"
+            ]
+          }
+        }
+      ],
+    );
+  });
+
+  test('it returns the expected codelenses for a test tile with a gjs extension', async () => {
+    const textDocument = await workspace.openTextDocument({
+      language: 'glint-js',
+      content: `import { module, test } from 'qunit';
+
+module('Unit | Utility | test-util', function() {
+  test('it does the thing', function(assert) {
+    assert.ok(true);
+  });
+});`,
+    });
+
+    const doc: TextDocument = {
+      ...textDocument,
+      fileName: 'dummy-test.gjs',
+    };
+
+    const provider = new RunTestCodeLensProvider();
+    const lenses = await provider.provideCodeLenses(doc);
+    const parsedLenses = JSON.parse(JSON.stringify(lenses));
+    console.log(JSON.stringify(lenses))
+
+    assert.deepStrictEqual(
+      parsedLenses,
+      [
+        {
+          "range": [
+            {
+              "line": 2,
+              "character": 0
+            },
+            {
+              "line": 2,
+              "character": 35
+            }
+          ],
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Module",
+            "arguments": [
+              "Unit | Utility | test-util"
+            ]
+          }
+        },
+        {
+          "range": [
+            {
+              "line": 3,
+              "character": 2
+            },
+            {
+              "line": 3,
+              "character": 26
+            }
+          ],
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Test",
+            "arguments": [
+              "Unit | Utility | test-util: it does the thing"
+            ]
+          }
+        }
+      ],
+    );
   });
 
   test('it returns the expected codelenses when there are nested modules', async () => {
     const textDocument = await workspace.openTextDocument({
-      language: 'js',
+      language: 'javascript',
       content: `import { module, test } from 'qunit';
 
 module('Unit | Utility | test-util', function() {
@@ -52,160 +254,163 @@ module('Unit | Utility | test-util', function() {
 
     const provider = new RunTestCodeLensProvider();
     const lenses = await provider.provideCodeLenses(doc);
-    assert.deepEqual(lenses, [
-      {
-        "command": {
-          "arguments": [
-            "Unit | Utility | test-util"
+    const parsedLenses = JSON.parse(JSON.stringify(lenses));
+    assert.deepStrictEqual(
+      parsedLenses, 
+      [
+        {
+          "range": [
+            {
+              "line": 2,
+              "character": 0
+            },
+            {
+              "line": 2,
+              "character": 35
+            }
           ],
-          "command": "extension.runTest",
-          "title": "Run Module",
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Module",
+            "arguments": [
+              "Unit | Utility | test-util"
+            ]
+          }
         },
-        "range": {
-          "_end": {
-            "_character": 35,
-            "_line": 2,
-          },
-          "_start": {
-            "_character": 0,
-            "_line": 2,
-          },
-        },
-      },
-      {
-        "command": {
-          "arguments": [
-            "Unit | Utility | test-util: it does the thing"
+        {
+          "range": [
+            {
+              "line": 3,
+              "character": 2
+            },
+            {
+              "line": 3,
+              "character": 26
+            }
           ],
-          "command": "extension.runTest",
-          "title": "Run Test"
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Test",
+            "arguments": [
+              "Unit | Utility | test-util: it does the thing"
+            ]
+          }
         },
-        "range": {
-          "_end": {
-            "_character": 26,
-            "_line": 3,
-          },
-          "_start": {
-            "_character": 2,
-            "_line": 3,
-          },
-        },
-      },
-      {
-        "command": {
-          "arguments": [
-            "Unit | Utility | test-util > helper1"
+        {
+          "range": [
+            {
+              "line": 7,
+              "character": 2
+            },
+            {
+              "line": 7,
+              "character": 18
+            }
           ],
-          "command": "extension.runTest",
-          "title": "Run Module",
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Module",
+            "arguments": [
+              "Unit | Utility | test-util > helper1"
+            ]
+          }
         },
-        "range": {
-          "_end": {
-            "_character": 18,
-            "_line": 7,
-          },
-          "_start": {
-            "_character": 2,
-            "_line": 7,
-          },
-        },
-      },
-      {
-        "command": {
-          "arguments": [
-            "Unit | Utility | test-util > helper1: it does the thing"
+        {
+          "range": [
+            {
+              "line": 8,
+              "character": 4
+            },
+            {
+              "line": 8,
+              "character": 28
+            }
           ],
-          "command": "extension.runTest",
-          "title": "Run Test",
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Test",
+            "arguments": [
+              "Unit | Utility | test-util > helper1: it does the thing"
+            ]
+          }
         },
-        "range": {
-          "_end": {
-            "_character": 28,
-            "_line": 8,
-          },
-          "_start": {
-            "_character": 4,
-            "_line": 8,
-          },
-        },
-      },
-      {
-        "command": {
-          "arguments": [
-            "Unit | Utility | test-util > helper3"
+        {
+          "range": [
+            {
+              "line": 13,
+              "character": 2
+            },
+            {
+              "line": 13,
+              "character": 18
+            }
           ],
-          "command": "extension.runTest",
-          "title": "Run Module",
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Module",
+            "arguments": [
+              "Unit | Utility | test-util > helper3"
+            ]
+          }
         },
-        "range": {
-          "_end": {
-            "_character": 18,
-            "_line": 13,
-          },
-          "_start": {
-            "_character": 2,
-            "_line": 13,
-          },
-        },
-      },
-      {
-        "command": {
-          "arguments": [
-            "Unit | Utility | test-util > helper3: it does the thing"
+        {
+          "range": [
+            {
+              "line": 14,
+              "character": 4
+            },
+            {
+              "line": 14,
+              "character": 28
+            }
           ],
-          "command": "extension.runTest",
-          "title": "Run Test",
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Test",
+            "arguments": [
+              "Unit | Utility | test-util > helper3: it does the thing"
+            ]
+          }
         },
-        "range": {
-          "_end": {
-            "_character": 28,
-            "_line": 14,
-          },
-          "_start": {
-            "_character": 4,
-            "_line": 14,
-          },
-        },
-      },
-      {
-        "command": {
-          "arguments": [
-            "Unit | Utility | test-util > helper3"
+        {
+          "range": [
+            {
+              "line": 19,
+              "character": 2
+            },
+            {
+              "line": 19,
+              "character": 18
+            }
           ],
-          "command": "extension.runTest",
-          "title": "Run Module",
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Module",
+            "arguments": [
+              "Unit | Utility | test-util > helper3"
+            ]
+          }
         },
-        "range": {
-          "_end": {
-            "_character": 18,
-            "_line": 19,
-          },
-          "_start": {
-            "_character": 2,
-            "_line": 19,
-          },
-        },
-      },
-      {
-        "command": {
-          "arguments": [
-            "Unit | Utility | test-util > helper3: it does the thing"
+        {
+          "range": [
+            {
+              "line": 20,
+              "character": 4
+            },
+            {
+              "line": 20,
+              "character": 28
+            }
           ],
-          "command": "extension.runTest",
-          "title": "Run Test",
-        },
-        "range": {
-          "_end": {
-            "_character": 28,
-            "_line": 20,
-          },
-          "_start": {
-            "_character": 4,
-            "_line": 20,
+          "command": {
+            "command": "extension.runTest",
+            "title": "Run Test",
+            "arguments": [
+              "Unit | Utility | test-util > helper3: it does the thing"
+            ]
           }
         }
-      }
-    ]
+      ]
     );
   });
 });
